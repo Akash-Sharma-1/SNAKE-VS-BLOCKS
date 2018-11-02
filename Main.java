@@ -96,7 +96,8 @@ public class Main extends Application {
 
         button1.setOnAction(e -> {
             GamePlay g=new GamePlay();
-            Scene game=g.game();
+            Scene game=g.game(scene,primaryStage);
+            game.setFill(Color.BLACK);
             primaryStage.setTitle("Game-Play");
             primaryStage.setScene(game);
 
