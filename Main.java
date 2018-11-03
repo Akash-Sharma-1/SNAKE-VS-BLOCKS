@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.animation.Animation;
+import javafx.animation.PathTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,9 +19,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.Group;
+import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.util.Date;
@@ -50,11 +54,14 @@ public class Main extends Application {
         button1.setMinHeight(30);
         button2.setMinWidth(150);
         button2.setMinHeight(30);
-        HBox hbox = new HBox(button1, button2);
-        hbox.setLayoutX(30);
-        hbox.setLayoutY(300);
-        hbox.setSpacing(40);
+        HBox hbox = new HBox(button1);
+        hbox.setLayoutX(120);
+        hbox.setLayoutY(270);
+        HBox hboxx = new HBox(button2);
+        hboxx.setLayoutX(120);
+        hboxx.setLayoutY(320);
         r.getChildren().add(hbox);
+        r.getChildren().add(hboxx);
 
         //LEADERBOARD BUTTON
         Button button3= new Button("LeaderBoard");
@@ -62,14 +69,91 @@ public class Main extends Application {
         button3.setMinHeight(30);
         HBox hbox2 = new HBox(button3);
         hbox2.setLayoutX(120);
-        hbox2.setLayoutY(400);
+        hbox2.setLayoutY(370);
         Label lastscore= new Label("Recent Score:");
         lastscore.setLayoutX(300);
         lastscore.setLayoutY(0);
         lastscore.setTextFill(Color.WHITE);
+        Rectangle rekt=new Rectangle(380,480);
+        rekt.setLayoutX(10);
+        rekt.setLayoutY(10);
+        Circle c1 =new Circle(10);
+        c1.setFill(Color.YELLOW);
+        c1.setLayoutX(0);
+        Circle c2 =new Circle(10);
+        c2.setFill(Color.RED);
+        c2.setLayoutX(20);
+        Circle c3 =new Circle(10);
+        c3.setFill(Color.WHITE);
+        c3.setLayoutX(40);
+        Circle c4 =new Circle(10);
+        c4.setFill(Color.GREEN);
+        c4.setLayoutX(60);
+        Circle c5 =new Circle(10);
+        c5.setFill(Color.BLUE);
+        c5.setLayoutX(80);
+        PathTransition pl= new PathTransition();
+        pl.setPath(rekt);
+        pl.setNode(c1);
+        pl.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+        pl.setCycleCount(Animation.INDEFINITE);
+        pl.setAutoReverse(true);
+        pl.setDuration(Duration.seconds(4));
+        pl.play();
+        rekt.setLayoutX(10);
+        rekt.setLayoutY(10);
+        rekt.setHeight(460);
+        rekt.setWidth(360);
 
+        //
+        PathTransition pl1= new PathTransition();
+        pl1.setPath(rekt);
+        pl1.setNode(c2);
+        pl1.setCycleCount(Animation.INDEFINITE);
+        pl1.setAutoReverse(true);
+        pl1.setDuration(Duration.seconds(4));
+        pl1.play();
+        rekt.setLayoutX(10);
+        rekt.setLayoutY(10);
+        rekt.setHeight(440);
+        rekt.setWidth(340);
+
+        //
+        PathTransition pl2= new PathTransition();
+        pl2.setPath(rekt);
+        pl2.setNode(c3);
+        pl2.setCycleCount(Animation.INDEFINITE);
+        pl2.setAutoReverse(true);
+        pl2.setDuration(Duration.seconds(4));
+        pl2.play();
+
+        //
+        rekt.setLayoutX(10);
+        rekt.setLayoutY(10);
+        rekt.setHeight(420);
+        rekt.setWidth(320);
+        PathTransition pl3= new PathTransition();
+        pl3.setPath(rekt);
+        pl3.setNode(c4);
+        pl3.setCycleCount(Animation.INDEFINITE);
+        pl3.setAutoReverse(true);
+        pl3.setDuration(Duration.seconds(4));
+        pl3.play();
+        //
+        rekt.setLayoutX(10);
+        rekt.setLayoutY(10);
+        rekt.setHeight(400);
+        rekt.setWidth(300);
+
+        PathTransition pl4= new PathTransition();
+        pl4.setPath(rekt);
+        pl4.setNode(c5);
+        pl4.setCycleCount(Animation.INDEFINITE);
+        pl4.setAutoReverse(true);
+        pl4.setDuration(Duration.seconds(4));
+        pl4.play();
         r.getChildren().add(hbox2);
-        Group root = new Group(r, hbox,lastscore);
+        Group root = new Group(r, hbox,lastscore,c1,c2,c3,c4,c5);
 
 
         //SCENE 1 -> HOME PAGE
