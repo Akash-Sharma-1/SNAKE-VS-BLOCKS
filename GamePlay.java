@@ -1,7 +1,5 @@
 package sample;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableBooleanValue;
@@ -11,10 +9,11 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.application.Application;
-import javafx.animation.TranslateTransition;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
@@ -29,10 +28,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.Callable;
+class textrect extends Pane
+{
+    Text s;
+    Rectangle r;
+    StackPane st;
 
+    textrect(Rectangle r,Text s,Pane p)
+    {
+        this.r=r;
+        this.s=s;
+        this.st=new StackPane();
+        st.getChildren().addAll(r,s);
+        p.getChildren().add(st);
+
+    }
+}
 public class GamePlay{
 
-     public void blockgenerator(Pane p)
+     public void blockgenerator(Pane p,ArrayList<textrect> blocks,ArrayList<Circle> snake,ArrayList<textrect> blockss)
      {
          Random r=new Random();
          int noblock=(r.nextInt(3)+1);
@@ -41,8 +55,10 @@ public class GamePlay{
          for (int i=0; i<5; i++) {
              list.add(i);
          }
+//         textrect b = new textrect(78,78,"12");
+
          Rectangle b=new Rectangle(78,78);
-         ArrayList<Rectangle> blocks= new ArrayList<Rectangle>();
+//         ArrayList<textrect> blocks= new ArrayList<textrect>();
 
 
 
@@ -50,8 +66,8 @@ public class GamePlay{
          {
 
              int pos=(r.nextInt(4));
-             b.setLayoutX(pos*80);
-             b.setLayoutY(-120);
+             b.setX(pos*80);
+             b.setY(-120);
              b.setArcWidth(20);
              b.setArcHeight(20);
              double rr = r.nextDouble();
@@ -60,8 +76,15 @@ public class GamePlay{
              double oo = r.nextDouble();
              Color rectangleColor = new Color(rr, gg, bb,1);
              b.setFill(rectangleColor);
-             p.getChildren().add(b);
-             blocks.add(b);
+             Text t=new Text("21");
+             t.setX(pos*80);
+             t.setY(-120);
+             textrect q=new textrect(b,new Text("12"),p);
+             q.st.setLayoutX(pos*80);
+             q.st.setLayoutY(-120);
+             blocks.add(q);
+             blockss.add(q);
+//             p.getChildren().addAll(blocks);
 
 
          }
@@ -83,11 +106,19 @@ public class GamePlay{
                  double oo = r.nextDouble();
                  Color rectangleColor = new Color(rr, gg, bb, 1);
                  x.setFill(rectangleColor);
-                 blocks.add(x);
+                 Text t=new Text("21");
+                 t.setX(pos*80);
+                 t.setY(-120);
+                 textrect q=new textrect(x,new Text("12"),p);
+                 q.st.setLayoutX(pos*80);
+                 q.st.setLayoutY(-120);
+                 blocks.add(q);
+                 blockss.add(q);
+
 //                 System.out.println(blocks);
 
              }
-             p.getChildren().addAll(blocks);
+//             p.getChildren().addAll(blocks);
 
          }
          for(int i=0;i<noblock;i++)
@@ -96,11 +127,31 @@ public class GamePlay{
              transition.setDuration(Duration.seconds(6));
 //             transition.setInterpolator(Interpolator.LINEAR);
              transition.setToY(630);
-             transition.setNode(blocks.get(i));
+             transition.setNode(blocks.get(i).st);
              transition.play();
-
-
          }
+//         System.out.println(snake.get(0).getTranslateX());
+//         double x=snake.get(0).getTranslateX();
+//         x+=200;
+//////         System.out.println(noblock);
+////
+//         for(int i=0;i<noblock;i++)
+//         {
+//          System.out.println(blocks.get(i).getX()+" -- "+(blocks.get(i).getX()+80));
+//          System.out.println(x);
+//            if(x>=blocks.get(i).getX() && x<=(blocks.get(i).getX()+80))
+//            {
+//                System.out.println("TRUE");
+//            }
+//            else
+//            {
+//                System.out.println("FALSE");
+//
+//            }
+
+
+//         }
+
 
 
 
@@ -113,7 +164,7 @@ public class GamePlay{
      }
 
 
-    public void wallgenerator(Pane p,int ii) {
+    public void wallgenerator(Pane p,int ii,ArrayList<Rectangle> blocks,ArrayList<Rectangle> walls) {
         Random r = new Random();
         int noblock = (r.nextInt(2) + 1);
 
@@ -121,7 +172,7 @@ public class GamePlay{
         for (int i = 0; i < 5; i++) {
             list.add(i);
         }
-        ArrayList<Rectangle> blocks = new ArrayList<Rectangle>();
+//        ArrayList<Rectangle> blocks = new ArrayList<Rectangle>();
 
 
         if (noblock == 1) {
@@ -149,6 +200,8 @@ public class GamePlay{
 //            b.setLayoutY(size);
             b.setFill(Color.WHITE);
             blocks.add(b);
+            walls.add(b);
+
             p.getChildren().add(b);
 
 
@@ -178,10 +231,13 @@ public class GamePlay{
 
                 x.setFill(Color.WHITE);
                 blocks.add(x);
+                walls.add(x);
+
 //                 System.out.println(blocks);
 
             }
             p.getChildren().addAll(blocks);
+
 
         }
         for(int i=0;i<noblock;i++)
@@ -195,9 +251,9 @@ public class GamePlay{
         }
 
     }
-    public void tokengenerator(Pane p,int ii)
+    public void tokengenerator(Pane p,int ii,ArrayList<Circle> tokens, ArrayList<Integer> tokensout)
     {
-        ArrayList<Rectangle> tokens=new ArrayList<Rectangle>();
+//        ArrayList<Rectangle> tokens=new ArrayList<Rectangle>();
         Random r = new Random();
             int x=(int)(Math.random()*4);
             if(ii==0) x=0;
@@ -207,6 +263,7 @@ public class GamePlay{
             if(x==0)
             {
                 c=new Circle(((pos*80)-40),-18,9, Color.YELLOW);
+//                else c=new Circle(((pos*80)-40),-18,9, Color.RED);
                 p.getChildren().add(c);
 
             }
@@ -261,7 +318,8 @@ public class GamePlay{
 
                 }
             }
-
+            tokens.add(c);
+            tokensout.add(x);
             TranslateTransition transition=new TranslateTransition();
             transition.setDuration(Duration.seconds(6));
             if(ii==0)transition.setToY(632);
@@ -274,16 +332,34 @@ public class GamePlay{
      public void moveleft(ArrayList<Circle> snake,Label l)
      {
          l.setTranslateX(l.getTranslateX() - 20);
-         for(int i=0;i<5;i++) {
+         for(int i=0;i<snake.size();i++) {
              snake.get(i).setTranslateX(snake.get(i).getTranslateX() - 20);
          }
      }
      public void moveright(ArrayList<Circle> snake,Label l)
      {
          l.setTranslateX(l.getTranslateX() + 20);
-         for(int i=0;i<5;i++) {
+         for(int i=0;i<snake.size();i++) {
              snake.get(i).setTranslateX(snake.get(i).getTranslateX()+20);
          }
+     }
+     public void addlength(ArrayList<Circle> snake,Label l,Pane p)
+     {
+        double y=snake.get(snake.size()-1).getCenterY()+14;
+        double x;
+        if(snake.size()!=5)  x=snake.get(snake.size()-1).getTranslateX();
+        else x=l.getTranslateX()+200;
+         Circle c=new Circle();
+         c.setTranslateX(x);
+         c.setCenterY(y);
+         c.setRadius(7);
+         c.setFill(Color.YELLOW);
+        snake.add(c);
+        String text=Integer.toString(snake.size());
+        l.setText(text);
+        p.getChildren().removeAll(snake);
+        p.getChildren().addAll(snake);
+
      }
      public Scene game(Scene home, Stage primaryStage)
      {
@@ -311,29 +387,60 @@ public class GamePlay{
              snake.add(new Circle(200,point,7, Color.YELLOW));
              point+=14;
          }
+         Rectangle rr=new Rectangle(80,80);
 
 
          p.getChildren().addAll(snake);
          p.getChildren().add(len);
 
+         ArrayList<textrect> blockss= new ArrayList<textrect>();
+         ArrayList<Circle> tokens11= new ArrayList<Circle>();
+         ArrayList<Integer> token1type= new ArrayList<Integer>();
+         ArrayList<Rectangle> walls11= new ArrayList<Rectangle>();
+         ArrayList<Rectangle> walls22= new ArrayList<Rectangle>();
+         ArrayList<Circle> tokens22= new ArrayList<Circle>();
+         ArrayList<Integer> token2type= new ArrayList<Integer>();
+
+
+
+
          Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(3.4), new EventHandler<ActionEvent>() {
 
              @Override
              public void handle(ActionEvent event) {
-                 blockgenerator(p);
+                 ArrayList<textrect> blocks= new ArrayList<textrect>();
+                 ArrayList<Rectangle> wall1= new ArrayList<Rectangle>();
+
+                 blockgenerator(p,blocks,snake,blockss);
                  //Walls with Blocks
-                 wallgenerator(p,0);
-                 tokengenerator(p,0);
+                 wallgenerator(p,0,wall1,walls11);
+                 tokengenerator(p,0,tokens11,token1type);
+
              }
 
+
          }));
+
+//         for(int i=0;i<blockss.size();i++) {
+//             while(blockss.get(i).getTranslateY()<=260)
+//             {
+//                 System.out.println(blockss.get(i).getY());
+////
+//             }
+
+//
+//
+//         }
+
+
          Timeline tSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(3), new EventHandler<ActionEvent>() {
 
              @Override
              public void handle(ActionEvent event) {
                  //middle wall
-                 wallgenerator(p,1);
+                 ArrayList<Rectangle> wall2= new ArrayList<Rectangle>();
 
+                 wallgenerator(p,1,wall2,walls22);
              }
 
          }));
@@ -345,10 +452,114 @@ public class GamePlay{
 //                 blockgenerator(p);
                  //Walls with Blocks
 //                 wallgenerator(p,0);
-                 tokengenerator(p,1);
+                 tokengenerator(p,1,tokens22,token2type);
+//                 System.out.println(snake.get(0).getTranslateX());
+
+
              }
 
          }));
+         Timeline checker = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+
+             @Override
+             public void handle(ActionEvent event) {
+                 for(int i=0;i<blockss.size();i++)
+                 {
+                     if(snake.get(0).getBoundsInParent().intersects(blockss.get(i).st.getBoundsInParent()))
+                     {
+//                                 for(int k=0;k<8;k++)
+//                                 {
+//                                     for (int y=0;y<8;y++)
+//                                     {
+//                                         Rectangle r=new Rectangle(10,10);
+//                                         r.setLayoutX(blockss.get(i).getX()+k);
+//                                         r.setLayoutY(blockss.get(i).getY()+y);
+//                                         r.setFill(Color.WHITE);
+//                                         p.getChildren().add(r);
+//                                     }
+//                                 }
+//                                 System.out.println(blockss.get(i).r.getX());
+                         Random rr=new Random();
+                         Circle c=new Circle(5);
+                         c.setFill(Color.WHITE);
+                         int lr=rr.nextInt(100);
+
+                         if(lr%2==0)c.setCenterX(blockss.get(i).r.getX()+rr.nextInt(40));
+                         else c.setCenterX(blockss.get(i).r.getX()-rr.nextInt(40));
+
+                         c.setCenterY(blockss.get(i).st.getTranslateY()-80);
+                         double rrr = rr.nextDouble();
+                         double gg = rr.nextDouble();
+                         double bb = rr.nextDouble();
+                         double oo = rr.nextDouble();
+                         Color rectangleColor = new Color(rrr, gg, bb,1);
+                         c.setFill(rectangleColor);
+                         p.getChildren().add(c);
+
+                         TranslateTransition transition=new TranslateTransition();
+                         transition.setDuration(Duration.seconds(3));
+                         lr=rr.nextInt(100);
+                         if(lr%2==0)transition.setToY(c.getCenterY()+rr.nextInt(5));
+                         else transition.setToY(c.getCenterY()-rr.nextInt(5));
+                         lr=rr.nextInt(100);
+                         if(lr%2==0)  transition.setToX(c.getCenterX()+rr.nextInt(5));
+                         else transition.setToX(c.getCenterX()-rr.nextInt(5));
+                         transition.setNode(c);
+                         transition.play();
+
+                         FadeTransition ft = new FadeTransition(Duration.seconds(2), c);
+                         ft.setFromValue(1.0);
+                         ft.setToValue(0.0);
+                         ft.play();
+                         ScaleTransition st = new ScaleTransition(Duration.seconds(2),c);
+                         st.setFromX(1f);
+                         st.setFromY(1f);
+                         st.setToX(4f);
+                         st.setToY(4f);
+                         st.play();
+//                                 st.setCycleCount(4f);
+                         p.getChildren().remove(blockss.get(i).st);
+
+                     }
+                 }
+
+
+
+             }
+         }));
+
+
+         Timeline tokencheck = new Timeline(new KeyFrame(Duration.millis(250), new EventHandler<ActionEvent>() {
+
+             @Override
+             public void handle(ActionEvent event) {
+                 for(int i=0;i<tokens11.size();i++)
+                 {
+                     if(snake.get(0).getBoundsInParent().intersects(tokens11.get(i).getBoundsInParent()))
+                     {
+                         if(token1type.get(i)==0)
+                         {
+                             addlength(snake,len,p);
+                         }
+                         p.getChildren().remove(tokens11.get(i));
+
+                     }
+                 }
+                 for(int i=0;i<tokens22.size();i++)
+                 {
+                     if(snake.get(0).getBoundsInParent().intersects(tokens22.get(i).getBoundsInParent()))
+                     {
+                         if(token2type.get(i)==0)
+                         {
+                             addlength(snake,len,p);
+                         }
+                         p.getChildren().remove(tokens22.get(i));
+                     }
+                 }
+             }
+
+         }));
+
 
 
          len.setTextFill(Color.WHITE);
@@ -359,7 +570,12 @@ public class GamePlay{
          tSecondsWonder.play();
          sevenSecondsWonder.setCycleCount(Timeline.INDEFINITE);
          sevenSecondsWonder.play();
-         primaryStage.setResizable(false);
+         checker.setCycleCount(Timeline.INDEFINITE);
+         checker.play();
+         tokencheck.setCycleCount(Timeline.INDEFINITE);
+         tokencheck.play();
+
+             primaryStage.setResizable(false);
          Scene ga=new Scene(p,400, 500,Color.BLACK);
          ga.setOnKeyPressed(e ->{
              switch(e.getCode())
