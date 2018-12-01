@@ -37,7 +37,7 @@ public class Main extends Application {
         Pane r =new Pane();
 //
 //SNAKE IMAGE::
-        Image image = new Image(new FileInputStream("C:/Users/AKASH SHARMA/Desktop/unnamed.png"));
+        Image image = new Image(new FileInputStream("src/sample/unnamed.png"));
         ImageView imageView = new ImageView(image);
         imageView.setX(100);
         imageView.setY(50);

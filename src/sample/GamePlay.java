@@ -1,11 +1,5 @@
 package sample;
 import javafx.animation.*;
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableBooleanValue;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.ScheduledService;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -13,23 +7,19 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
-import java.io.SequenceInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-import java.util.Scanner;
-import java.util.concurrent.Callable;
+
 class textrect
 {
     Text s;
@@ -42,7 +32,7 @@ class textrect
         this.s=s;
         this.st=new StackPane();
         st.getChildren().addAll(r,s);
-        p.getChildren().add(st);            
+        p.getChildren().add(st);
     }
 }
 public class GamePlay{
@@ -277,7 +267,7 @@ public class GamePlay{
                 Image image=null;
                 try
                 {
-                    image = new Image(new FileInputStream("C:/Users/AKASH SHARMA/Desktop/magnet.jpg"));
+                    image = new Image(new FileInputStream("src/sample/magnet.jpg"));
                     if(ii==0)c=new Circle(((pos*80)-40),-18,9);
                     else c=new Circle(((pos*80)-40),0,9);
                     c.setFill(new ImagePattern(image));
@@ -294,7 +284,7 @@ public class GamePlay{
                 Image image=null;
                 try
                 {
-                    image = new Image(new FileInputStream("C:/Users/AKASH SHARMA/Desktop/shield.jpg"));
+                    image = new Image(new FileInputStream("src/sample/shield.jpg"));
                     if(ii==0)c=new Circle(((pos*80)-40),-18,9);
                     else c=new Circle(((pos*80)-40),0,9);
                     c.setFill(new ImagePattern(image));
@@ -311,7 +301,7 @@ public class GamePlay{
                 Image image=null;
                 try
                 {
-                    image = new Image(new FileInputStream("C:/Users/AKASH SHARMA/Desktop/bomb.jpg"));
+                    image = new Image(new FileInputStream("src/sample/bomb.jpg"));
                     if(ii==0)c=new Circle(((pos*80)-40),-18,9);
                     else c=new Circle(((pos*80)-40),0,9);
                     c.setFill(new ImagePattern(image));
