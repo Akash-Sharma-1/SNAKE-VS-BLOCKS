@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.Scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -182,6 +183,13 @@ public class Main extends Application {
             GamePlay g=new GamePlay();
             Scene game=g.game(scene,primaryStage);
             game.setFill(Color.BLACK);
+            Stage s=new Stage();
+            Pane p=new Pane();
+            TextField namer=new TextField();
+            Button b=new Button("Click");
+            b.setOnAction(e-> );
+            Scene ga=new Scene(p,300, 400);
+            s.show();
             primaryStage.setTitle("Game-Play");
             primaryStage.setScene(game);
 
