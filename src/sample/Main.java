@@ -30,7 +30,10 @@ import java.io.FileInputStream;
 import java.util.Date;
 
 public class Main extends Application {
-
+    public  void giveplayername(String n,player p)
+    {
+        p=new player(n,0);
+    }
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -180,18 +183,29 @@ public class Main extends Application {
         });
 
         button1.setOnAction(e -> {
-            GamePlay g=new GamePlay();
-            Scene game=g.game(scene,primaryStage);
-            game.setFill(Color.BLACK);
+
             Stage s=new Stage();
             Pane p=new Pane();
             TextField namer=new TextField();
             Button b=new Button("Click");
-            b.setOnAction(e-> );
-            Scene ga=new Scene(p,300, 400);
+            b.setLayoutX(100);
+            b.setLayoutY(200);
+            player current=new player("",0);
+            GamePlay g=new GamePlay(current);
+            Scene game=g.game(scene,primaryStage);
+            game.setFill(Color.BLACK);
+            b.setOnAction(ee-> {
+                giveplayername(namer.getText(),current);
+                s.close();
+                primaryStage.setTitle("Game-Play");
+                primaryStage.setScene(game);
+
+            });
+            Pane paner=new Pane();
+            paner.getChildren().addAll(b,namer);
+            Scene ga=new Scene(paner,300, 300);
+            s.setScene(ga);
             s.show();
-            primaryStage.setTitle("Game-Play");
-            primaryStage.setScene(game);
 
         });
 

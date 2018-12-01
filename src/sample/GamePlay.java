@@ -36,7 +36,12 @@ class textrect
     }
 }
 public class GamePlay{
+     player current;
 
+     GamePlay(player p)
+     {
+         current=p;
+     }
      public void blockgenerator(Pane p,ArrayList<textrect> blocks,ArrayList<Circle> snake,ArrayList<textrect> blockss,ArrayList<TranslateTransition> trans)
      {
          Random r=new Random();
@@ -382,7 +387,6 @@ public class GamePlay{
             snake.remove(snake.size()-1);
             String text=Integer.toString(snake.size());
             l.setText(text);
-            p.getChildren().addAll(snake);
 
         }
 
@@ -496,7 +500,7 @@ public class GamePlay{
 
          }));
 
-         Timeline checker = new Timeline(new KeyFrame(Duration.millis(450), new EventHandler<ActionEvent>() {
+         Timeline checker = new Timeline(new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
 
              @Override
              public void handle(ActionEvent event) {
@@ -505,10 +509,11 @@ public class GamePlay{
                  {
                      if(snake.get(0).getBoundsInParent().intersects(blockss.get(i).st.getBoundsInParent()))
                      {
+                         p.getChildren().remove(blockss.get(i).st);
+
 
                          if(Integer.parseInt(blockss.get(i).s.getText())>=snake.size())
                          {
-                             p.getChildren().remove(blockss.get(i).st);
                              return ;
 //                             System.out.println("game-over, ghar jaa ab");
 
@@ -551,8 +556,8 @@ public class GamePlay{
                                  st.setToY(4f);
                                  st.play();
                              }
-                             p.getChildren().remove(blockss.get(i).st);
                              sublength(snake,len,p,Integer.parseInt(blockss.get(i).s.getText()),blockss.get(i).st);
+                             p.getChildren().addAll(snake);
 
 
                          }
