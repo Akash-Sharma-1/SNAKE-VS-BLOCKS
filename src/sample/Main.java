@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.util.Duration;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -199,11 +200,16 @@ public class Main extends Application {
 
 
         //GO TO LEADERBOARD
-
+        LeaderBoard l=new LeaderBoard();
+        ArrayList<String> xx=l.deserialiser("file.ser");
+        ArrayList<Integer> x=l.scoredeserialiser("file2.ser");
+        for(int qw=0;qw<x.size();qw++)
+        {
+            l.addplayer(new player(xx.get(qw),x.get(qw)));
+        }
         button3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                LeaderBoard l=new LeaderBoard();
                 VBox v= l.leaderboardscene(primaryStage,scene);
                 Group leaderboardtable=new Group(v);
                 Scene s= new Scene(leaderboardtable,400, 500);
@@ -241,7 +247,7 @@ public class Main extends Application {
             name.setLayoutY(80);
             player current=new player(" ",0);
             GamePlay g=new GamePlay(current);
-            Scene game=g.game(scene,primaryStage,root);
+            Scene game=g.game(scene,primaryStage,root,l);
             game.setFill(Color.BLACK);
             b.setOnAction(ee-> {
 

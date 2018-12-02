@@ -18,6 +18,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -433,6 +436,23 @@ public class GamePlay{
         s.shieldexist=true;
     }
 
+//    public String serialiser(ArrayList<String> pp,String filename)
+//    {
+//        try
+//        {
+//
+//            FileOutputStream file=new FileOutputStream(filename);
+//            ObjectOutputStream output=new ObjectOutputStream(file);
+//            output.writeObject(pp);
+//            output.close();
+//        }
+//        catch(IOException ex)
+//        {
+////            System.out.println("IOException is caught");
+//        }
+//        return filename;
+//    }
+
     /**
      * Restarts the game
      * @param block Timeline generating blocks
@@ -549,7 +569,7 @@ public class GamePlay{
      * @param root homepage group on which components were added
      * @return scene with the main pane added
      */
-     public Scene game(Scene home, Stage primaryStage, Group root)
+     public Scene game(Scene home, Stage primaryStage, Group root,LeaderBoard l)
      {
          paused pausecheck=new paused();
          Pane p=new Pane();
@@ -580,6 +600,8 @@ public class GamePlay{
              primaryStage.setTitle("Snake vs Block - Welcome Back!");
              primaryStage.setScene(home);
          });
+
+
 
          ArrayList<Circle> snake=new ArrayList<Circle>();
          int point=250;
@@ -844,8 +866,14 @@ public class GamePlay{
 
                                  });
                                  paner.getChildren().addAll(gameover,well_played,fscore,b);
+                                 l.addplayer(currentplayer);
+                                 l.serialiser(l.stringserialize,"file.ser");
+                                 l.scoreserialiser(l.intserialize,"file2.ser");
 
-                                 isgameover.end=true;
+//                                 l.deserialiser("file.ser");
+//                                 l.scoredeserialiser("file2.ser");
+
+                                     isgameover.end=true;
                                  return;
                                      //current player object has the current score
                                  }
