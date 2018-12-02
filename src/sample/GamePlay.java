@@ -35,13 +35,18 @@ class textrect
         p.getChildren().add(st);
     }
 }
+class shield
+{
+    boolean shieldexist;
+}
 public class GamePlay{
-     player current;
+     player currentplayer;
 
      GamePlay(player p)
      {
-         current=p;
+         currentplayer=p;
      }
+
      public void blockgenerator(Pane p,ArrayList<textrect> blocks,ArrayList<Circle> snake,ArrayList<textrect> blockss,ArrayList<TranslateTransition> trans)
      {
          Random r=new Random();
@@ -392,12 +397,18 @@ public class GamePlay{
 
 
     }
+    public void gotshield(shield s)
+    {
+        s.shieldexist=true;
+    }
 
      public Scene game(Scene home, Stage primaryStage)
      {
          Pane p=new Pane();
          Label score = new Label("Score :");
          int scoreval=0;
+         shield to=new shield();
+
          MenuItem menuItem1 = new MenuItem("EXIT");
          MenuItem menuItem2 = new MenuItem("RESTART");
          MenuButton menuButton = new MenuButton("Options", null, menuItem1, menuItem2);
@@ -405,7 +416,12 @@ public class GamePlay{
          menuButton.setLayoutY(460);
          score.setLayoutY(460);
          score.setTextFill(Color.WHITE);
-         p.getChildren().addAll(menuButton,score);
+         Label val=new Label("0");
+         val.setLayoutX(score.getLayoutX()+30);
+         val.setLayoutY(score.getLayoutY());
+         val.setTextFill(Color.WHITE);
+
+         p.getChildren().addAll(menuButton,score,val);
          menuItem1.setOnAction(event -> {
              primaryStage.setTitle("Snake vs Block - Welcome Back!");
              primaryStage.setScene(home);
@@ -500,7 +516,32 @@ public class GamePlay{
 
          }));
 
-         Timeline checker = new Timeline(new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+         Timeline wallchecker = new Timeline(new KeyFrame(Duration.seconds(200), new EventHandler<ActionEvent>() {
+
+             @Override
+             public void handle(ActionEvent event) {
+                 for(int j=0;j<walls11.size();j++)
+                 {
+
+                     for(int i=0;i<snake.size();i++)
+                     {
+                         
+                     }
+                 }
+                 for(int j=0;j<walls22.size();j++)
+                 {
+
+                 }
+
+
+//                 p.getChildren().addAll(snake);
+
+
+
+             }
+
+         }));
+         Timeline checker = new Timeline(new KeyFrame(Duration.millis(500), new EventHandler<ActionEvent>() {
 
              @Override
              public void handle(ActionEvent event) {
@@ -509,17 +550,65 @@ public class GamePlay{
                  {
                      if(snake.get(0).getBoundsInParent().intersects(blockss.get(i).st.getBoundsInParent()))
                      {
-                         p.getChildren().remove(blockss.get(i).st);
-
 
                          if(Integer.parseInt(blockss.get(i).s.getText())>=snake.size())
                          {
-                             return ;
+                             if(to.shieldexist==true)
+                             {
+                                 p.getChildren().remove(blockss.get(i).st);
+                                 for(int l=0;l<5;l++) {
+                                     Random rr = new Random();
+                                     Circle c = new Circle(5);
+                                     c.setFill(Color.WHITE);
+                                     int lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) c.setCenterX(blockss.get(i).r.getX() + rr.nextInt(40));
+                                     else c.setCenterX(blockss.get(i).r.getX() - rr.nextInt(40)+20);
+                                     c.setCenterY(blockss.get(i).st.getTranslateY() - 80+rr.nextInt(40)-20);
+                                     double rrr = rr.nextDouble();
+                                     double gg = rr.nextDouble();
+                                     double bb = rr.nextDouble();
+                                     double oo = rr.nextDouble();
+                                     Color rectangleColor = new Color(rrr, gg, bb, 1);
+                                     c.setFill(rectangleColor);
+                                     c.setFill(Color.DARKRED);
+                                     p.getChildren().add(c);
+                                     TranslateTransition transition = new TranslateTransition();
+                                     transition.setDuration(Duration.seconds(3));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToY(c.getCenterY() + rr.nextInt(5));
+                                     else transition.setToY(c.getCenterY() - rr.nextInt(5));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToX(c.getCenterX() + rr.nextInt(5));
+                                     else transition.setToX(c.getCenterX() - rr.nextInt(5));
+                                     transition.setNode(c);
+                                     transition.play();
+                                     FadeTransition ft = new FadeTransition(Duration.seconds(2), c);
+                                     ft.setFromValue(1.0);
+                                     ft.setToValue(0.0);
+                                     ft.play();
+                                     ScaleTransition st = new ScaleTransition(Duration.seconds(2), c);
+                                     st.setFromX(1f);
+                                     st.setFromY(1f);
+                                     st.setToX(4f);
+                                     st.setToY(4f);
+                                     st.play();
+                                 }
+                                 currentplayer.score+=Integer.parseInt(blockss.get(i).s.getText());
+                                 val.setText(Integer.toString(currentplayer.score));
+                             }
+
+                             else
+                             {
+                                 return ;
+
+                             }
 //                             System.out.println("game-over, ghar jaa ab");
 
                          }
                          else
                          {
+                             p.getChildren().remove(blockss.get(i).st);
+
                              for(int l=0;l<5;l++) {
                                  Random rr = new Random();
                                  Circle c = new Circle(5);
@@ -556,8 +645,18 @@ public class GamePlay{
                                  st.setToY(4f);
                                  st.play();
                              }
-                             sublength(snake,len,p,Integer.parseInt(blockss.get(i).s.getText()),blockss.get(i).st);
+                             if(to.shieldexist==true)
+                             {
+                             }
+                             else
+                             {
+                                 sublength(snake,len,p,Integer.parseInt(blockss.get(i).s.getText()),blockss.get(i).st);
+
+                             }
                              p.getChildren().addAll(snake);
+//                             System.out.println();
+                             currentplayer.score+=Integer.parseInt(blockss.get(i).s.getText());
+                             val.setText(Integer.toString(currentplayer.score));
 
 
                          }
@@ -586,7 +685,7 @@ public class GamePlay{
 
                      }
 
-
+                     System.out.println(to.shieldexist);
                  }
 
 
@@ -604,27 +703,274 @@ public class GamePlay{
                  {
                      if(snake.get(0).getBoundsInParent().intersects(tokens11.get(i).getBoundsInParent()))
                      {
+                         p.getChildren().remove(tokens11.get(i));
+
                          if(token1type.get(i)==0)
                          {
                              addlength(snake,len,p);
                          }
-                         p.getChildren().remove(tokens11.get(i));
+
 
                      }
                  }
                  for(int i=0;i<tokens22.size();i++)
                  {
-                     if(snake.get(0).getBoundsInParent().intersects(tokens22.get(i).getBoundsInParent()))
-                     {
-                         if(token2type.get(i)==0)
-                         {
-                             addlength(snake,len,p);
+                     int cnt=0;
+                     if(snake.get(0).getBoundsInParent().intersects(tokens22.get(i).getBoundsInParent())) {
+                         if (token2type.get(i) == 0) {
+                             addlength(snake, len, p);
                          }
-                         p.getChildren().remove(tokens22.get(i));
-                     }
-                 }
-             }
+                         if (token2type.get(i) == 1) {
+                             for (int k = 0; k < tokens11.size(); k++) {
+                                 System.out.println(tokens11.get(k).getTranslateY());
+//                                 Circle c = new Circle(5);
+//                                 c.setFill(Color.WHITE);
+//                                 c.setCenterY(tokens11.get(k).getCenterX());
+//                                 c.setCenterX(tokens11.get(k).getTranslateY());
+//                                 p.getChildren().add(c);
+                                 p.getChildren().remove(tokens11.get(k));
 
+                                 for (int l = 0; l < 3; l++) {
+                                     Random rr = new Random();
+                                     Circle c = new Circle(2);
+                                     c.setFill(Color.WHITE);
+                                     int lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) c.setCenterX(tokens11.get(k).getCenterX() + rr.nextInt(40));
+                                     else c.setCenterX(tokens11.get(k).getCenterX() - rr.nextInt(40) + 20);
+                                     c.setCenterY(tokens11.get(k).getTranslateY() + rr.nextInt(40) - 20);
+                                     double rrr = rr.nextDouble();
+                                     double gg = rr.nextDouble();
+                                     double bb = rr.nextDouble();
+                                     double oo = rr.nextDouble();
+                                     Color rectangleColor = new Color(rrr, gg, bb, 1);
+                                     c.setFill(rectangleColor);
+                                     c.setFill(Color.YELLOW);
+                                     p.getChildren().add(c);
+                                     TranslateTransition transition = new TranslateTransition();
+                                     transition.setDuration(Duration.seconds(3));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToY(c.getCenterY() + rr.nextInt(2));
+                                     else transition.setToY(c.getCenterY() - rr.nextInt(2));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToX(c.getCenterX() + rr.nextInt(2));
+                                     else transition.setToX(c.getCenterX() - rr.nextInt(2));
+                                     transition.setNode(c);
+                                     transition.play();
+                                     FadeTransition ft = new FadeTransition(Duration.seconds(2), c);
+                                     ft.setFromValue(1.0);
+                                     ft.setToValue(0.0);
+                                     ft.play();
+                                     ScaleTransition st = new ScaleTransition(Duration.seconds(2), c);
+                                     st.setFromX(1f);
+                                     st.setFromY(1f);
+                                     st.setToX(4f);
+                                     st.setToY(4f);
+                                     st.play();
+                                     cnt++;
+                                 }
+
+                             }
+                             for (int k = 0; k < tokens22.size(); k++) {
+                                 if (token2type.get(k) == 0) {
+                                     p.getChildren().remove(tokens22.get(k));
+//                                 System.out.println(tokens11.get(k).getCenterX());
+                                     for (int l = 0; l < 3; l++) {
+
+                                         Random rr = new Random();
+                                         Circle c = new Circle(3);
+                                         int lr = rr.nextInt(100);
+                                         if (lr % 2 == 0) c.setCenterX(tokens22.get(k).getCenterX() + rr.nextInt(40));
+                                         else c.setCenterX(tokens22.get(k).getCenterX() - rr.nextInt(40) + 20);
+                                         c.setCenterY(tokens22.get(k).getTranslateY() + rr.nextInt(40) - 20);
+                                         double rrr = rr.nextDouble();
+                                         double gg = rr.nextDouble();
+                                         double bb = rr.nextDouble();
+                                         double oo = rr.nextDouble();
+                                         Color rectangleColor = new Color(rrr, gg, bb, 1);
+                                         c.setFill(Color.YELLOW);
+                                         p.getChildren().add(c);
+                                         TranslateTransition transition = new TranslateTransition();
+                                         transition.setDuration(Duration.seconds(3));
+                                         lr = rr.nextInt(100);
+                                         if (lr % 2 == 0) transition.setToY(c.getCenterY() + rr.nextInt(2));
+                                         else transition.setToY(c.getCenterY() - rr.nextInt(2));
+                                         lr = rr.nextInt(100);
+                                         if (lr % 2 == 0) transition.setToX(c.getCenterX() + rr.nextInt(2));
+                                         else transition.setToX(c.getCenterX() - rr.nextInt(2));
+                                         transition.setNode(c);
+                                         transition.play();
+                                         FadeTransition ft = new FadeTransition(Duration.seconds(2), c);
+                                         ft.setFromValue(1.0);
+                                         ft.setToValue(0.0);
+                                         ft.play();
+                                         ScaleTransition st = new ScaleTransition(Duration.seconds(2), c);
+                                         st.setFromX(1f);
+                                         st.setFromY(1f);
+                                         st.setToX(4f);
+                                         st.setToY(4f);
+                                         st.play();
+                                     }
+                                     cnt++;
+
+                                 }
+                             }
+                             addlength(snake, len, p);
+                             addlength(snake, len, p);
+//                         addlength(snake,len,p);
+                         }
+
+
+
+
+//                         sublength(snake,len,p,cnt/5,new StackPane());
+
+                         p.getChildren().remove(tokens22.get(i));
+                         if (token2type.get(i) == 2) {
+//                             System.out.println("yo");
+                             for (int ij = 0; ij < snake.size(); ij++) {
+                                 FillTransition ft = new FillTransition(Duration.millis(5000), snake.get(ij), Color.YELLOW, Color.RED);
+                                 ft.setCycleCount(2);
+                                 ft.setAutoReverse(true);
+                                 ft.play();
+                             }
+                             gotshield(to);
+                             PauseTransition delay = new PauseTransition(Duration.seconds(5));
+                             delay.setOnFinished( evente ->to.shieldexist=false);
+                             delay.play();
+
+                         }
+                         if(token2type.get(i)==2)
+                         {
+                             for(int x=0;x<blockss.size();x++)
+                             {
+                                 p.getChildren().remove(blockss.get(x).st);
+                                 for(int l=0;l<5;l++) {
+                                     Random rr = new Random();
+                                     Circle c = new Circle(5);
+                                     c.setFill(Color.WHITE);
+                                     int lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) c.setCenterX(blockss.get(x).r.getX() + rr.nextInt(40));
+                                     else c.setCenterX(blockss.get(x).r.getX() - rr.nextInt(40)+20);
+                                     c.setCenterY(blockss.get(x).st.getTranslateY() - 80+rr.nextInt(40)-20);
+                                     double rrr = rr.nextDouble();
+                                     double gg = rr.nextDouble();
+                                     double bb = rr.nextDouble();
+                                     double oo = rr.nextDouble();
+                                     Color rectangleColor = new Color(rrr, gg, bb, 1);
+                                     c.setFill(rectangleColor);
+                                     if(l%2==0)c.setFill(Color.WHITE);
+                                     else c.setFill(Color.ORANGE);
+                                     p.getChildren().add(c);
+                                     TranslateTransition transition = new TranslateTransition();
+                                     transition.setDuration(Duration.seconds(3));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToY(c.getCenterY() + rr.nextInt(5));
+                                     else transition.setToY(c.getCenterY() - rr.nextInt(5));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToX(c.getCenterX() + rr.nextInt(5));
+                                     else transition.setToX(c.getCenterX() - rr.nextInt(5));
+                                     transition.setNode(c);
+                                     transition.play();
+                                     FadeTransition ft = new FadeTransition(Duration.seconds(2), c);
+                                     ft.setFromValue(1.0);
+                                     ft.setToValue(0.0);
+                                     ft.play();
+                                     ScaleTransition st = new ScaleTransition(Duration.seconds(2), c);
+                                     st.setFromX(1f);
+                                     st.setFromY(1f);
+                                     st.setToX(4f);
+                                     st.setToY(4f);
+                                     st.play();
+                                 }
+                             }
+                             for(int x=0;x<walls11.size();x++)
+                             {
+                                 p.getChildren().remove(walls11.get(x));
+                                 for(int l=0;l<3;l++) {
+                                     Random rr = new Random();
+                                     Circle c = new Circle(5);
+                                     c.setFill(Color.WHITE);
+                                     int lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) c.setCenterX(walls11.get(x).getX() + rr.nextInt(40));
+                                     else c.setCenterX(walls11.get(x).getX() - rr.nextInt(40)+20);
+                                     c.setCenterY(walls11.get(x).getTranslateY() - 80+rr.nextInt(40)-20);
+                                     double rrr = rr.nextDouble();
+                                     double gg = rr.nextDouble();
+                                     double bb = rr.nextDouble();
+                                     double oo = rr.nextDouble();
+                                     Color rectangleColor = new Color(rrr, gg, bb, 1);
+                                     c.setFill(rectangleColor);
+                                     if(l%2==0)c.setFill(Color.WHITE);
+                                     else c.setFill(Color.WHITE);
+                                     p.getChildren().add(c);
+                                     TranslateTransition transition = new TranslateTransition();
+                                     transition.setDuration(Duration.seconds(3));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToY(c.getCenterY() + rr.nextInt(5));
+                                     else transition.setToY(c.getCenterY() - rr.nextInt(5));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToX(c.getCenterX() + rr.nextInt(5));
+                                     else transition.setToX(c.getCenterX() - rr.nextInt(5));
+                                     transition.setNode(c);
+                                     transition.play();
+                                     FadeTransition ft = new FadeTransition(Duration.seconds(2), c);
+                                     ft.setFromValue(1.0);
+                                     ft.setToValue(0.0);
+                                     ft.play();
+                                     ScaleTransition st = new ScaleTransition(Duration.seconds(2), c);
+                                     st.setFromX(1f);
+                                     st.setFromY(1f);
+                                     st.setToX(4f);
+                                     st.setToY(4f);
+                                     st.play();
+                                 }
+                             }
+                             for(int x=0;x<walls22.size();x++)
+                             {
+                                 p.getChildren().remove(walls22.get(x));
+                                 for(int l=0;l<3;l++) {
+                                     Random rr = new Random();
+                                     Circle c = new Circle(5);
+                                     c.setFill(Color.WHITE);
+                                     int lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) c.setCenterX(walls22.get(x).getX() + rr.nextInt(40));
+                                     else c.setCenterX(walls22.get(x).getX() - rr.nextInt(40)+20);
+                                     c.setCenterY(walls22.get(x).getTranslateY() - 80+rr.nextInt(40)-20);
+                                     double rrr = rr.nextDouble();
+                                     double gg = rr.nextDouble();
+                                     double bb = rr.nextDouble();
+                                     double oo = rr.nextDouble();
+                                     Color rectangleColor = new Color(rrr, gg, bb, 1);
+                                     c.setFill(rectangleColor);
+                                     if(l%2==0)c.setFill(Color.WHITE);
+                                     else c.setFill(Color.WHITE);
+                                     p.getChildren().add(c);
+                                     TranslateTransition transition = new TranslateTransition();
+                                     transition.setDuration(Duration.seconds(3));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToY(c.getCenterY() + rr.nextInt(5));
+                                     else transition.setToY(c.getCenterY() - rr.nextInt(5));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToX(c.getCenterX() + rr.nextInt(5));
+                                     else transition.setToX(c.getCenterX() - rr.nextInt(5));
+                                     transition.setNode(c);
+                                     transition.play();
+                                     FadeTransition ft = new FadeTransition(Duration.seconds(2), c);
+                                     ft.setFromValue(1.0);
+                                     ft.setToValue(0.0);
+                                     ft.play();
+                                     ScaleTransition st = new ScaleTransition(Duration.seconds(2), c);
+                                     st.setFromX(1f);
+                                     st.setFromY(1f);
+                                     st.setToX(4f);
+                                     st.setToY(4f);
+                                     st.play();
+                                 }
+                             }
+                         }
+                     }
+                  }
+                 }
          }));
 
 
