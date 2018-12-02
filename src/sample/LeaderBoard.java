@@ -15,8 +15,18 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+
+/**
+ * class with leaderboard- list of all the players name and stats
+ */
 public class LeaderBoard {
 
+    /**
+     * Leaderboard setup function
+     * @param primaryStage stage on which it will be used
+     * @param scene  scene on which it will be used
+     * @return vertical box to be added
+     */
     public VBox leaderboardscene(Stage primaryStage, Scene scene) {
         TableView table = new TableView();
         Label label=new Label("Welcome to the LeaderBoard");

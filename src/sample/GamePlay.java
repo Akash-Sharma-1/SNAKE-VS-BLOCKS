@@ -2,9 +2,11 @@ package sample;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -18,42 +20,44 @@ import javafx.util.Duration;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
 
-class textrect
-{
-    Text s;
-    Rectangle r;
-    StackPane st;
 
-    textrect(Rectangle r,Text s,Pane p)
-    {
-        this.r=r;
-        this.s=s;
-        this.st=new StackPane();
-        st.getChildren().addAll(r,s);
-        p.getChildren().add(st);
-    }
-}
-class shield
-{
-    boolean shieldexist;
-}
-class snake_dir
-{
-    int direction;
-    //1 is left
-    //2 is right
-}
+/**
+ *@author AKASH SHARMA
+ *@version 39.1
+ *
+ */
+
+/**
+ * This class holds the actual gameplay including blocks, walls and other gui components.
+ */
 public class GamePlay{
+    /**
+     * Player who is playing this object
+     */
      player currentplayer;
 
+    /**
+     *
+     * @param p Player for this gameplay
+     */
      GamePlay(player p)
      {
          currentplayer=p;
      }
 
-     public void blockgenerator(Pane p,ArrayList<textrect> blocks,ArrayList<Circle> snake,ArrayList<textrect> blockss,ArrayList<TranslateTransition> trans)
+    /**
+     *GENERATES BLOCKS FOR THE SCREEN PERIODICALLY AND TRANSLATES THEM
+     * @param p Pane on which blocks will be generated
+     * @param blocks Arraylist of all the blocks on the current screen
+     * @param snake Arraylist of all the balls of the snake
+     * @param blockss Arraylist of all the texted-blocks on the current screen (for decreasign their weights)
+     * @param trans ArrayList holding all the transitions of all the blocks
+     * @param checkblock HashMap holding all the block's status if collided or not
+     */
+     public void blockgenerator(Pane p,ArrayList<textrect> blocks,ArrayList<Circle> snake,ArrayList<textrect> blockss,ArrayList<TranslateTransition> trans,HashMap<Integer,Boolean> checkblock)
      {
          Random r=new Random();
          int noblock=(r.nextInt(3)+1);
@@ -62,10 +66,8 @@ public class GamePlay{
          for (int i=0; i<5; i++) {
              list.add(i);
          }
-//         textrect b = new textrect(78,78,"12");
 
          Rectangle b=new Rectangle(78,78);
-//         ArrayList<textrect> blocks= new ArrayList<textrect>();
 
          if(noblock==1)
          {
@@ -82,6 +84,7 @@ public class GamePlay{
              Color rectangleColor = new Color(rr, gg, bb,1);
              b.setFill(rectangleColor);
              Text t=new Text("21");
+
              t.setX(pos*80);
              t.setY(-120);
              Random bn=new Random();
@@ -95,6 +98,7 @@ public class GamePlay{
              q.st.setLayoutY(-120);
              blocks.add(q);
              blockss.add(q);
+             checkblock.put(blockss.size()-1,false);
 //             p.getChildren().addAll(blocks);
 
 
@@ -140,6 +144,7 @@ public class GamePlay{
                  q.st.setLayoutY(-120);
                  blocks.add(q);
                  blockss.add(q);
+                 checkblock.put(blockss.size()-1,false);
 
 //                 System.out.println(blocks);
 
@@ -157,40 +162,19 @@ public class GamePlay{
              transition.play();
              trans.add(transition);
          }
-//         System.out.println(snake.get(0).getTranslateX());
-//         double x=snake.get(0).getTranslateX();
-//         x+=200;
-//////         System.out.println(noblock);
-////
-//         for(int i=0;i<noblock;i++)
-//         {
-//          System.out.println(blocks.get(i).getX()+" -- "+(blocks.get(i).getX()+80));
-//          System.out.println(x);
-//            if(x>=blocks.get(i).getX() && x<=(blocks.get(i).getX()+80))
-//            {
-//                System.out.println("TRUE");
-//            }
-//            else
-//            {
-//                System.out.println("FALSE");
-//
-//            }
 
-
-//         }
-
-
-
-
-//         yourTransition.setOnFinished(new EventHandler<ActionEvent>(){
-//             public void handle(ActionEvent AE){
-//                 transitionPlaying = false;
-//             }
 
 
      }
 
-
+    /**
+     * GENERATES WALLS FOR THE SCREEN PERIODICALLY AND TRANSLATES THEM
+     * @param p Pane on which all the walls will be generated on
+     * @param ii Indicates the timeline it originates from 3sec or 5 sec
+     * @param blocks Arraylist of all the blocks on the current screen for avoiding collision
+     * @param walls Arraylist of all the walls on the current screen
+     * @param walltrans Arraylist of all the wall's transitions on the current screen
+     */
     public void wallgenerator(Pane p,int ii,ArrayList<Rectangle> blocks,ArrayList<Rectangle> walls,ArrayList<TranslateTransition> walltrans) {
         Random r = new Random();
         int noblock = (r.nextInt(2) + 1);
@@ -278,6 +262,15 @@ public class GamePlay{
         }
 
     }
+
+    /**
+     * GENERATES TOKENS FOR THE SCREEN PERIODICALLY AND TRANSLATES THEM
+     * @param p Pane on which tokens will be generated on
+     * @param ii Indicates the timeline it originates from 3sec or 5 sec
+     * @param tokens Arraylist of all the tokens on the current screen
+     * @param tokensout Arraylist of all the token's types on the current screen
+     * @param tokentrans Arraylist of all the token's transition on the current screen
+     */
     public void tokengenerator(Pane p,int ii,ArrayList<Circle> tokens, ArrayList<Integer> tokensout,ArrayList<TranslateTransition> tokentrans)
     {
 //        ArrayList<Rectangle> tokens=new ArrayList<Rectangle>();
@@ -357,6 +350,12 @@ public class GamePlay{
 
 
     }
+
+    /**
+     * MOVES THE SNAKE TOWARDS LEFT
+     * @param snake Arraylist of snake balls
+     * @param l Label indicating the length of the snake
+     */
      public void moveleft(ArrayList<Circle> snake,Label l)
      {
          l.setTranslateX(l.getTranslateX() - 20);
@@ -364,6 +363,11 @@ public class GamePlay{
              snake.get(i).setTranslateX(snake.get(i).getTranslateX() - 20);
          }
      }
+    /**
+     * MOVES THE SNAKE TOWARDS RIGHT
+     * @param snake Arraylist of snake balls
+     * @param l Label indicating the length of the snake
+     */
      public void moveright(ArrayList<Circle> snake,Label l)
      {
          l.setTranslateX(l.getTranslateX() + 20);
@@ -371,6 +375,13 @@ public class GamePlay{
              snake.get(i).setTranslateX(snake.get(i).getTranslateX()+20);
          }
      }
+
+    /**
+     * INCREMENTING SNAKES LENGTH
+     * @param snake Arraylist of snake balls
+     * @param l Label indicating the length of the snake
+     * @param p Pane on which snake is attached to
+     */
      public void addlength(ArrayList<Circle> snake,Label l,Pane p)
      {
         double y=snake.get(snake.size()-1).getCenterY()+14;
@@ -389,6 +400,15 @@ public class GamePlay{
         p.getChildren().addAll(snake);
 
      }
+
+    /**
+     * DECREMENTING SNAKES LENGTH
+     * @param snake Arraylist of snake balls
+     * @param l Label indicating the length of the snake
+     * @param p Pane on which snake is attached to
+     * @param value the weight by which it will be decreased
+     * @param s StackPane of the block it collides with
+     */
     public void sublength(ArrayList<Circle> snake,Label l,Pane p, int value, StackPane s)
     {
         for(int i=0;i<value;i++)
@@ -403,21 +423,149 @@ public class GamePlay{
 
 
     }
+
+    /**
+     * Function indicating the existence of shield power
+     * @param s shield token object
+     */
     public void gotshield(shield s)
     {
         s.shieldexist=true;
     }
 
-     public Scene game(Scene home, Stage primaryStage)
+    /**
+     * Restarts the game
+     * @param block Timeline generating blocks
+     * @param wall Timeline generating walls
+     * @param token Timeline generating tokens
+     * @param blockss Arraylist of all the blocks on the current screen
+     * @param tokens11 Arraylist of all the tokens on the current screen from 1st timeline
+     * @param tokens22 Arraylist of all the tokens on the current screen from 2nd timeline
+     * @param walls11 Arraylist of all the walls on the current screen from 1st timeline
+     * @param walls22 Arraylist of all the walls on the current screen from 2nd timeline
+     * @param p Pane on which all this will re-added on
+     */
+    public void restarter(Timeline block,Timeline wall,Timeline token,ArrayList<textrect> blockss,ArrayList<Circle> tokens11,ArrayList<Circle> tokens22,ArrayList<Rectangle> walls11,ArrayList<Rectangle> walls22,Pane p)
+    {
+        block.pause();
+        wall.pause();
+        token.pause();
+        for(int i=0;i<blockss.size();i++)
+        {
+            p.getChildren().remove(blockss.get(i).st);
+
+        }
+        for(int i=0;i<tokens11.size();i++)
+        {
+            p.getChildren().remove(tokens11.get(i));
+        }
+        for(int i=0;i<tokens22.size();i++)
+        {
+            p.getChildren().remove(tokens22.get(i));
+
+        }
+        for(int i=0;i<walls11.size();i++)
+        {
+            p.getChildren().remove(walls11.get(i));
+
+        }
+        for(int i=0;i<walls22.size();i++)
+        {
+            p.getChildren().remove(walls22.get(i));
+
+        }
+        block.play();
+        wall.play();
+        token.play();
+    }
+
+    /**
+     * Pauses the gameplay
+     * @param block Timeline generating blocks
+     * @param wall  Timeline generating walls
+     * @param token Timeline generating tokens
+     * @param blockss Arraylist of all the blocks' translations on the current screen
+     * @param tokens11 Arraylist of all the tokens' translations on the current screen
+     * @param walls11 Arraylist of all the walls' translations on the current screen
+     * @param p Pane on which all this will re-added on
+     */
+    public void pauser(Timeline block,Timeline wall,Timeline token,ArrayList<TranslateTransition> blockss,ArrayList<TranslateTransition> tokens11,ArrayList<TranslateTransition> walls11,paused p)
+    {
+        if(p.pauseorplay)
+        {
+            block.pause();
+            wall.pause();
+            token.pause();
+            for(int i=0;i<blockss.size();i++)
+            {
+                blockss.get(i).pause();
+
+            }
+            for(int i=0;i<tokens11.size();i++)
+            {
+                tokens11.get(i).pause();
+            }
+
+            for(int i=0;i<walls11.size();i++)
+            {
+                walls11.get(i).pause();
+
+            }
+            p.pauseorplay=false;
+        }
+        else
+        {
+            block.play();
+            wall.play();
+            token.play();
+            for(int i=0;i<blockss.size();i++)
+            {
+                blockss.get(i).play();
+
+            }
+            for(int i=0;i<tokens11.size();i++)
+            {
+                tokens11.get(i).play();
+            }
+
+            for(int i=0;i<walls11.size();i++)
+            {
+                walls11.get(i).play();
+
+            }
+            p.pauseorplay=true;
+
+
+        }
+
+
+    }
+
+    /**
+     * The main function of this class which returns the scene with all the things added
+     * and acts as a mediator between home page and the gameplay page
+     * @param home home page scene
+     * @param primaryStage current stage on which the home scene will
+     * @param root homepage group on which components were added
+     * @return scene with the main pane added
+     */
+     public Scene game(Scene home, Stage primaryStage, Group root)
      {
+         paused pausecheck=new paused();
          Pane p=new Pane();
          Label score = new Label("Score :");
          int scoreval=0;
          shield to=new shield();
+         endgame isgameover=new endgame();
+         isgameover.end=false;
          snake_dir directiondetector=new snake_dir();
          MenuItem menuItem1 = new MenuItem("EXIT");
          MenuItem menuItem2 = new MenuItem("RESTART");
-         MenuButton menuButton = new MenuButton("Options", null, menuItem1, menuItem2);
+         MenuItem menuItem3= new MenuItem("PAUSE/PLAY");
+//         if(pausecheck.pauseorplay)  menuItem3
+//         else menuItem3= new MenuItem("PLAY");
+
+         MenuButton menuButton = new MenuButton("Options", null, menuItem1, menuItem2,menuItem3);
          menuButton.setLayoutX(320);
          menuButton.setLayoutY(460);
          score.setLayoutY(460);
@@ -432,6 +580,7 @@ public class GamePlay{
              primaryStage.setTitle("Snake vs Block - Welcome Back!");
              primaryStage.setScene(home);
          });
+
          ArrayList<Circle> snake=new ArrayList<Circle>();
          int point=250;
          Label len=new Label("5");
@@ -447,7 +596,6 @@ public class GamePlay{
 
          p.getChildren().addAll(snake);
          p.getChildren().add(len);
-
          ArrayList<textrect> blockss= new ArrayList<textrect>();
          ArrayList<Circle> tokens11= new ArrayList<Circle>();
          ArrayList<Integer> token1type= new ArrayList<Integer>();
@@ -459,8 +607,7 @@ public class GamePlay{
          ArrayList<TranslateTransition> blockstransition=new ArrayList<TranslateTransition>();
          ArrayList<TranslateTransition> wallstransition=new ArrayList<TranslateTransition>();
          ArrayList<TranslateTransition> tokenstransition=new ArrayList<TranslateTransition>();
-         ArrayList<Integer> a=new ArrayList<Integer>();
-
+         HashMap<Integer,Boolean> checkblock=new HashMap<Integer,Boolean>();
 
          Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(3.4), new EventHandler<ActionEvent>() {
 
@@ -469,14 +616,12 @@ public class GamePlay{
                  ArrayList<textrect> blocks= new ArrayList<textrect>();
                  ArrayList<Rectangle> wall1= new ArrayList<Rectangle>();
 
-                 blockgenerator(p,blocks,snake,blockss,blockstransition);
+                 blockgenerator(p,blocks,snake,blockss,blockstransition,checkblock);
                  //Walls with Blocks
                  wallgenerator(p,0,wall1,walls11,wallstransition);
                  tokengenerator(p,0,tokens11,token1type,tokenstransition);
-                 for (int i=0;i<blockss.size();i++)
-                 {
-                     a.add(0);
-                 }
+                 System.out.println(checkblock);
+
 
              }
 
@@ -537,8 +682,9 @@ public class GamePlay{
 //             }
 //
 //         }));
-         Timeline checker = new Timeline(new KeyFrame(Duration.millis(400), new EventHandler<ActionEvent>() {
 
+         Timeline checker = new Timeline(new KeyFrame(Duration.millis(400), new EventHandler<ActionEvent>() {
+                int a=0;
              @Override
              public void handle(ActionEvent event) {
 //                 System.out.println(snake.get(0).getTranslateX()+200);
@@ -601,12 +747,13 @@ public class GamePlay{
                  {
                      if(snake.get(0).getBoundsInParent().intersects(blockss.get(i).st.getBoundsInParent()))
                      {
+                         p.getChildren().remove(blockss.get(i).st);
+
 
                          if(Integer.parseInt(blockss.get(i).s.getText())>=snake.size())
                          {
                              if(to.shieldexist==true)
                              {
-                                 p.getChildren().remove(blockss.get(i).st);
                                  for(int l=0;l<5;l++) {
                                      Random rr = new Random();
                                      Circle c = new Circle(5);
@@ -643,6 +790,7 @@ public class GamePlay{
                                      st.setToX(4f);
                                      st.setToY(4f);
                                      st.play();
+
                                  }
                                  currentplayer.score+=Integer.parseInt(blockss.get(i).s.getText());
                                  val.setText(Integer.toString(currentplayer.score));
@@ -650,84 +798,115 @@ public class GamePlay{
 
                              else
                              {
+                                 if(checkblock.get(i)==false) {
+                                     System.out.println("saas");
 
-                                 System.out.println("game-over, ghar jaa ab");
-                                //game over - since the snake collided with a bigger block
-                                 //game over page
-//                                 Stage s=new Stage();
-//                                 Label gameover=new Label("GAME OVER");
-//                                 Label well_played=new Label("WELL PLAYED , "+currentplayer.name+" !");
-//                                 Label fscore=new Label("YOUR FINAL SCORE IS "+Integer.toString(currentplayer.score));
-//                                 Pane paner=new Pane();
-//                                 paner.getChildren().addAll(gameover,well_played,fscore);
-//                                 Scene ga=new Scene(paner,300, 300);
-//                                 s.setScene(ga);
-//                                 s.show();
-//                                 Button b=new Button("GO TO HOME");
-//                                 b.setLayoutX(100);
-//                                 b.setLayoutY(200);
-                                 return ;
+//                                 p.getChildren().remove(blockss.get(i).st);
+//
+//                                 //game over - since the snake collided with a bigger block
+//                                 //game over page
+////                                 return ;
+                                 Stage s=new Stage();
+                                 Label gameover=new Label("OOPS! GAME OVER");
+                                 gameover.setLayoutX(50);
+                                 gameover.setLayoutY(50);
+                                     gameover.setTextFill(Color.DARKOLIVEGREEN);
+                                     gameover.setFont(Font.font("Cambria", 20));
+                                     gameover.setStyle("-fx-font-weight: bold");
 
-                                 //current player object has the current score
+                                     Label well_played=new Label("WELL PLAYED , "+currentplayer.name+" !");
+                                 well_played.setLayoutX(50);
+                                 well_played.setLayoutY(100);
+                                     well_played.setTextFill(Color.MEDIUMVIOLETRED);
+                                     well_played.setFont(Font.font("Cambria", 20));
+                                     well_played.setStyle("-fx-font-weight: bold");
 
+                                     Label fscore=new Label("YOUR FINAL SCORE IS "+Integer.toString(currentplayer.score));
+                                 fscore.setLayoutX(50);
+                                 fscore.setLayoutY(150);
+                                     fscore.setStyle("-fx-font-weight: bold");
+
+                                     fscore.setTextFill(Color.GREEN);
+                                     fscore.setFont(Font.font("Cambria", 20));
+                                 Pane paner=new Pane();
+                                 paner.setStyle("-fx-background-color: #F6DBC7;");
+
+                                 Scene ga=new Scene(paner,300, 300);
+                                 s.setScene(ga);
+                                 s.show();
+                                 Button b=new Button("RETURN TO HOME");
+                                 b.setLayoutX(100);
+                                 b.setLayoutY(200);
+                                 b.setOnAction(ee->{
+                                     s.close();
+                                     primaryStage.setTitle("Snake vs Block - Welcome Back!");
+                                     primaryStage.setScene(home);
+
+                                 });
+                                 paner.getChildren().addAll(gameover,well_played,fscore,b);
+
+                                 isgameover.end=true;
+                                 return;
+                                     //current player object has the current score
+                                 }
 
                              }
 
                          }
-                         else
-                         {
-                             p.getChildren().remove(blockss.get(i).st);
+                         else {
+//                             p.getChildren().remove(blockss.get(i).st);
+                             if (checkblock.get(i)==false) {
+                                 for (int l = 0; l < 5; l++) {
+                                     Random rr = new Random();
+                                     Circle c = new Circle(5);
+                                     c.setFill(Color.WHITE);
+                                     int lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) c.setCenterX(blockss.get(i).r.getX() + rr.nextInt(40));
+                                     else c.setCenterX(blockss.get(i).r.getX() - rr.nextInt(40) + 20);
+                                     c.setCenterY(blockss.get(i).st.getTranslateY() - 80 + rr.nextInt(40) - 20);
+                                     double rrr = rr.nextDouble();
+                                     double gg = rr.nextDouble();
+                                     double bb = rr.nextDouble();
+                                     double oo = rr.nextDouble();
+                                     Color rectangleColor = new Color(rrr, gg, bb, 1);
+                                     c.setFill(rectangleColor);
+                                     p.getChildren().add(c);
+                                     TranslateTransition transition = new TranslateTransition();
+                                     transition.setDuration(Duration.seconds(3));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToY(c.getCenterY() + rr.nextInt(5));
+                                     else transition.setToY(c.getCenterY() - rr.nextInt(5));
+                                     lr = rr.nextInt(100);
+                                     if (lr % 2 == 0) transition.setToX(c.getCenterX() + rr.nextInt(5));
+                                     else transition.setToX(c.getCenterX() - rr.nextInt(5));
+                                     transition.setNode(c);
+                                     transition.play();
+                                     FadeTransition ft = new FadeTransition(Duration.seconds(2), c);
+                                     ft.setFromValue(1.0);
+                                     ft.setToValue(0.0);
+                                     ft.play();
+                                     ScaleTransition st = new ScaleTransition(Duration.seconds(2), c);
+                                     st.setFromX(1f);
+                                     st.setFromY(1f);
+                                     st.setToX(4f);
+                                     st.setToY(4f);
+                                     st.play();
+                                 }
+                                 if (to.shieldexist == true) {
 
-                             for(int l=0;l<5;l++) {
-                                 Random rr = new Random();
-                                 Circle c = new Circle(5);
-                                 c.setFill(Color.WHITE);
-                                 int lr = rr.nextInt(100);
-                                 if (lr % 2 == 0) c.setCenterX(blockss.get(i).r.getX() + rr.nextInt(40));
-                                 else c.setCenterX(blockss.get(i).r.getX() - rr.nextInt(40)+20);
-                                 c.setCenterY(blockss.get(i).st.getTranslateY() - 80+rr.nextInt(40)-20);
-                                 double rrr = rr.nextDouble();
-                                 double gg = rr.nextDouble();
-                                 double bb = rr.nextDouble();
-                                 double oo = rr.nextDouble();
-                                 Color rectangleColor = new Color(rrr, gg, bb, 1);
-                                 c.setFill(rectangleColor);
-                                 p.getChildren().add(c);
-                                 TranslateTransition transition = new TranslateTransition();
-                                 transition.setDuration(Duration.seconds(3));
-                                 lr = rr.nextInt(100);
-                                 if (lr % 2 == 0) transition.setToY(c.getCenterY() + rr.nextInt(5));
-                                 else transition.setToY(c.getCenterY() - rr.nextInt(5));
-                                 lr = rr.nextInt(100);
-                                 if (lr % 2 == 0) transition.setToX(c.getCenterX() + rr.nextInt(5));
-                                 else transition.setToX(c.getCenterX() - rr.nextInt(5));
-                                 transition.setNode(c);
-                                 transition.play();
-                                 FadeTransition ft = new FadeTransition(Duration.seconds(2), c);
-                                 ft.setFromValue(1.0);
-                                 ft.setToValue(0.0);
-                                 ft.play();
-                                 ScaleTransition st = new ScaleTransition(Duration.seconds(2), c);
-                                 st.setFromX(1f);
-                                 st.setFromY(1f);
-                                 st.setToX(4f);
-                                 st.setToY(4f);
-                                 st.play();
-                             }
-                             if(to.shieldexist==true)
-                             {
-                             }
-                             else
-                             {
-                                 sublength(snake,len,p,Integer.parseInt(blockss.get(i).s.getText()),blockss.get(i).st);
-                                 p.getChildren().addAll(snake);
+                                 }
+                                 else {
+                                     sublength(snake, len, p, Integer.parseInt(blockss.get(i).s.getText()), blockss.get(i).st);
+                                     p.getChildren().addAll(snake);
 
-                             }
+                                 }
 //                             System.out.println();
-                             currentplayer.score+=Integer.parseInt(blockss.get(i).s.getText());
-                             val.setText(Integer.toString(currentplayer.score));
+                                 currentplayer.score += Integer.parseInt(blockss.get(i).s.getText());
+                                 val.setText(Integer.toString(currentplayer.score));
+                                 checkblock.put(i,true);
+                                 return;
 
-
+                             }
                          }
 //                         else
 //                         {
@@ -1042,10 +1221,38 @@ public class GamePlay{
                  }
          }));
 
+         Timeline end = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
 
+             @Override
+             public void handle(ActionEvent event) {
+//                 System.out.println(currentplayer.name);
+                 if(isgameover.end==true)
+                 {
+                     fiveSecondsWonder.pause();
+                     tSecondsWonder.pause();
+                     sevenSecondsWonder.pause();
+                     checker.pause();
+                     tokencheck.pause();
+                     Label l=new Label(Integer.toString(currentplayer.score));
+                     l.setLayoutX(390);
+                     l.setLayoutY(0);
+                     l.setTextFill(Color.WHITE);
+                     root.getChildren().add(l);
 
+                 }
+
+             }
+         }));
+         menuItem2.setOnAction(event -> {
+             restarter(fiveSecondsWonder,tSecondsWonder,sevenSecondsWonder, blockss, tokens11, tokens22, walls11, walls22, p);
+         });
+         menuItem3.setOnAction(event -> {
+             pauser(fiveSecondsWonder,tSecondsWonder,sevenSecondsWonder, blockstransition, tokenstransition, wallstransition,pausecheck);
+         });
          len.setTextFill(Color.WHITE);
          p.setStyle("-fx-background-color: #000000;");
+         end.setCycleCount(Timeline.INDEFINITE);
+         end.play();
          fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
          fiveSecondsWonder.play();
          tSecondsWonder.setCycleCount(Timeline.INDEFINITE);

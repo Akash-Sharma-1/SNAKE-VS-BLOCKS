@@ -22,25 +22,55 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.util.Duration;
-
 import java.io.FileInputStream;
 import java.util.Date;
 
+/**
+ * @author AKASH SHARMA
+ * @version 39.1
+ */
+
+/**
+ *  It is the main home page for the game
+ */
 public class Main extends Application {
+    /**
+     * recent score of the player who played
+     */
+    int mainscore;
+
+
+
+    /**
+     * This method is a setter for the player's name
+     * @param n name of the player - given after prompt
+     * @param p player object
+     */
     public  void giveplayername(String n,player p)
     {
         p=new player(n,0);
     }
+
+    /**
+     *This is the default javafx start method. It initialises the screen with an image and 3 buttons. <br>
+     * It also displays the recent score of the player.
+     * This method also runs a cool animation for the background.
+     * @param primaryStage stage on which the game is running
+     * @throws Exception any exception which is thrown
+     */
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-//        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+
         Pane r =new Pane();
-//
-//SNAKE IMAGE::
+//        Media media = new Media("file:///Movies/test.mp3");
+
+    //          SNAKE IMAGE::
+
         Image image = new Image(new FileInputStream("src/sample/unnamed.png"));
         ImageView imageView = new ImageView(image);
         imageView.setX(100);
@@ -50,7 +80,7 @@ public class Main extends Application {
         imageView.setPreserveRatio(true);
         r.getChildren().add(imageView);
 
-//Buttons:
+        //Buttons:
         //GAMEPLAY PAGE BUTTONS
         Button button1 = new Button("Start New Game");
         Button button2 = new Button("Resume");
@@ -169,6 +199,7 @@ public class Main extends Application {
 
 
         //GO TO LEADERBOARD
+
         button3.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -186,23 +217,47 @@ public class Main extends Application {
 
             Stage s=new Stage();
             TextField namer=new TextField();
-            Button b=new Button("Click");
-            b.setLayoutX(100);
-            b.setLayoutY(200);
-            player current=new player("",0);
+            namer.setLayoutX(70);
+            namer.setLayoutY(135);
+            Button b=new Button("LET'S PLAY");
+            b.setLayoutX(120);
+            b.setLayoutY(180);
+            Label welcome=new Label("HI! WELCOME TO SNAKE VS BLOCKS!");
+            welcome.setLayoutX(20);
+            welcome.setLayoutY(40);
+            welcome.setStyle("-fx-font-size: 20px");
+            welcome.setStyle("-fx-font-weight: bold");
+            welcome.setTextFill(Color.RED);
+            welcome.setFont(Font.font("Cambria", 15));
+
+            Label name=new Label("What's your name?");
+            name.setStyle("-fx-font-size: 20px");
+            name.setStyle("-fx-font-weight: bold");
+            name.setTextFill(Color.BLACK);
+            name.setFont(Font.font("Cambria", 20));
+//            name.setStyle("-fx-text-fill: #333333");
+//            name.setStyle("-fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 )");
+            name.setLayoutX(80);
+            name.setLayoutY(80);
+            player current=new player(" ",0);
             GamePlay g=new GamePlay(current);
-            Scene game=g.game(scene,primaryStage);
+            Scene game=g.game(scene,primaryStage,root);
             game.setFill(Color.BLACK);
             b.setOnAction(ee-> {
-                giveplayername(namer.getText(),current);
+
+                g.currentplayer.name=namer.getText();
+                current.name=namer.getText();
                 s.close();
-                primaryStage.setTitle("Game-Play");
+                primaryStage.setTitle("Game-Play ");
                 primaryStage.setScene(game);
 
             });
             Pane paner=new Pane();
-            paner.getChildren().addAll(b,namer);
+            paner.getChildren().addAll(b,namer,welcome,name);
+
+            paner.setStyle("-fx-background-color: #E5F2FB;");
             Scene ga=new Scene(paner,300, 300);
+//            ga.setFill(Color.SKYBLUE);
             s.setScene(ga);
             s.show();
 
@@ -212,7 +267,10 @@ public class Main extends Application {
 
     }
 
-
+    /**
+     *Main function which launches the start function to run the home page
+     * @param args command line arguments if any
+     */
     public static void main(String[] args) {
         launch(args);
     }
