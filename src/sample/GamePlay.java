@@ -520,17 +520,32 @@ public class GamePlay{
 
              @Override
              public void handle(ActionEvent event) {
+                 System.out.println("yo");
                  for(int j=0;j<walls11.size();j++)
                  {
+                     System.out.println(walls11.get(j).getX());
 
                      for(int i=0;i<snake.size();i++)
                      {
-                         
+                         if(snake.get(i).getBoundsInParent().intersects(walls11.get(j).getBoundsInParent()))
+                         {
+                             System.out.println("collided");
+                         }
+
                      }
                  }
                  for(int j=0;j<walls22.size();j++)
                  {
+                     System.out.println(walls22.get(j).getX());
 
+                     for(int i=0;i<snake.size();i++)
+                     {
+                         if(snake.get(i).getBoundsInParent().intersects(walls11.get(j).getBoundsInParent()))
+                         {
+                             System.out.println("collided");
+                         }
+
+                     }
                  }
 
 
@@ -839,7 +854,7 @@ public class GamePlay{
                              delay.play();
 
                          }
-                         if(token2type.get(i)==2)
+                         if(token2type.get(i)==3)
                          {
                              for(int x=0;x<blockss.size();x++)
                              {
@@ -987,7 +1002,8 @@ public class GamePlay{
          checker.play();
          tokencheck.setCycleCount(Timeline.INDEFINITE);
          tokencheck.play();
-
+         wallchecker.play();
+         wallchecker.setCycleCount(Timeline.INDEFINITE);
          primaryStage.setResizable(false);
          Scene ga=new Scene(p,400, 500,Color.BLACK);
          ga.setOnKeyPressed(e ->{
