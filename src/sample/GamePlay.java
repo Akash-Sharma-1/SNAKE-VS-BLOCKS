@@ -39,6 +39,12 @@ class shield
 {
     boolean shieldexist;
 }
+class snake_dir
+{
+    int direction;
+    //1 is left
+    //2 is right
+}
 public class GamePlay{
      player currentplayer;
 
@@ -408,7 +414,7 @@ public class GamePlay{
          Label score = new Label("Score :");
          int scoreval=0;
          shield to=new shield();
-
+         snake_dir directiondetector=new snake_dir();
          MenuItem menuItem1 = new MenuItem("EXIT");
          MenuItem menuItem2 = new MenuItem("RESTART");
          MenuButton menuButton = new MenuButton("Options", null, menuItem1, menuItem2);
@@ -516,19 +522,49 @@ public class GamePlay{
 
          }));
 
-         Timeline wallchecker = new Timeline(new KeyFrame(Duration.seconds(200), new EventHandler<ActionEvent>() {
+//         Timeline wallchecker = new Timeline(new KeyFrame(Duration.seconds(200), new EventHandler<ActionEvent>() {
+//
+//             @Override
+//             public void handle(ActionEvent event) {
+////                 System.out.println("yo");
+//
+//
+//
+////                 p.getChildren().addAll(snake);
+//
+//
+//
+//             }
+//
+//         }));
+         Timeline checker = new Timeline(new KeyFrame(Duration.millis(400), new EventHandler<ActionEvent>() {
 
              @Override
              public void handle(ActionEvent event) {
-                 System.out.println("yo");
+//                 System.out.println(snake.get(0).getTranslateX()+200);
+
                  for(int j=0;j<walls11.size();j++)
                  {
-                     System.out.println(walls11.get(j).getX());
+//                     System.out.println(walls11.get(j).getX());
 
                      for(int i=0;i<snake.size();i++)
                      {
                          if(snake.get(i).getBoundsInParent().intersects(walls11.get(j).getBoundsInParent()))
                          {
+                             System.out.println(walls11.get(j).getX());
+                             System.out.println(snake.get(i).getTranslateX());
+                             if(directiondetector.direction==0)
+                             {
+                                 moveleft(snake,len);
+                                 directiondetector.direction=1;
+                             }
+                             else
+                             {
+                                 moveright(snake,len);
+                                 directiondetector.direction=0;
+
+
+                             }
                              System.out.println("collided");
                          }
 
@@ -536,31 +572,31 @@ public class GamePlay{
                  }
                  for(int j=0;j<walls22.size();j++)
                  {
-                     System.out.println(walls22.get(j).getX());
+//                     System.out.println(walls22.get(j).getX());
 
                      for(int i=0;i<snake.size();i++)
                      {
-                         if(snake.get(i).getBoundsInParent().intersects(walls11.get(j).getBoundsInParent()))
+                         if(snake.get(i).getBoundsInParent().intersects(walls22.get(j).getBoundsInParent()))
                          {
+                             System.out.println(walls22.get(j).getX());
+                             System.out.println(snake.get(i).getTranslateX()+200);
+                             if(directiondetector.direction==0)
+                             {
+                                 moveleft(snake,len);
+                                 directiondetector.direction=1;
+                             }
+                             else
+                             {
+                                 moveright(snake,len);
+                                 directiondetector.direction=0;
+
+
+                             }
                              System.out.println("collided");
                          }
 
                      }
                  }
-
-
-//                 p.getChildren().addAll(snake);
-
-
-
-             }
-
-         }));
-         Timeline checker = new Timeline(new KeyFrame(Duration.millis(500), new EventHandler<ActionEvent>() {
-
-             @Override
-             public void handle(ActionEvent event) {
-
                  for(int i=0;i<blockss.size();i++)
                  {
                      if(snake.get(0).getBoundsInParent().intersects(blockss.get(i).st.getBoundsInParent()))
@@ -614,10 +650,28 @@ public class GamePlay{
 
                              else
                              {
+
+                                 System.out.println("game-over, ghar jaa ab");
+                                //game over - since the snake collided with a bigger block
+                                 //game over page
+//                                 Stage s=new Stage();
+//                                 Label gameover=new Label("GAME OVER");
+//                                 Label well_played=new Label("WELL PLAYED , "+currentplayer.name+" !");
+//                                 Label fscore=new Label("YOUR FINAL SCORE IS "+Integer.toString(currentplayer.score));
+//                                 Pane paner=new Pane();
+//                                 paner.getChildren().addAll(gameover,well_played,fscore);
+//                                 Scene ga=new Scene(paner,300, 300);
+//                                 s.setScene(ga);
+//                                 s.show();
+//                                 Button b=new Button("GO TO HOME");
+//                                 b.setLayoutX(100);
+//                                 b.setLayoutY(200);
                                  return ;
 
+                                 //current player object has the current score
+
+
                              }
-//                             System.out.println("game-over, ghar jaa ab");
 
                          }
                          else
@@ -666,9 +720,9 @@ public class GamePlay{
                              else
                              {
                                  sublength(snake,len,p,Integer.parseInt(blockss.get(i).s.getText()),blockss.get(i).st);
+                                 p.getChildren().addAll(snake);
 
                              }
-                             p.getChildren().addAll(snake);
 //                             System.out.println();
                              currentplayer.score+=Integer.parseInt(blockss.get(i).s.getText());
                              val.setText(Integer.toString(currentplayer.score));
@@ -700,7 +754,7 @@ public class GamePlay{
 
                      }
 
-                     System.out.println(to.shieldexist);
+//                     System.out.println(to.shieldexist);
                  }
 
 
@@ -710,7 +764,7 @@ public class GamePlay{
 
 
 
-         Timeline tokencheck = new Timeline(new KeyFrame(Duration.millis(250), new EventHandler<ActionEvent>() {
+         Timeline tokencheck = new Timeline(new KeyFrame(Duration.millis(220), new EventHandler<ActionEvent>() {
 
              @Override
              public void handle(ActionEvent event) {
@@ -1002,8 +1056,8 @@ public class GamePlay{
          checker.play();
          tokencheck.setCycleCount(Timeline.INDEFINITE);
          tokencheck.play();
-         wallchecker.play();
-         wallchecker.setCycleCount(Timeline.INDEFINITE);
+//         wallchecker.setCycleCount(Timeline.INDEFINITE);
+//         wallchecker.play();
          primaryStage.setResizable(false);
          Scene ga=new Scene(p,400, 500,Color.BLACK);
          ga.setOnKeyPressed(e ->{
@@ -1011,10 +1065,13 @@ public class GamePlay{
              {
                  case A:
                      moveleft(snake,len);
+                     directiondetector.direction=1;
                      break;
 
                  case D:
                      moveright(snake,len);
+                     directiondetector.direction=0;
+
                      break;
              }
          });

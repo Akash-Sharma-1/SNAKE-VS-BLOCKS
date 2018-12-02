@@ -185,7 +185,6 @@ public class Main extends Application {
         button1.setOnAction(e -> {
 
             Stage s=new Stage();
-            Pane p=new Pane();
             TextField namer=new TextField();
             Button b=new Button("Click");
             b.setLayoutX(100);

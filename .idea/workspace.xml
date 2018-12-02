@@ -83,12 +83,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="17021" />
+          <entry key="java" value="17752" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="17021" />
+          <entry key="JAVA" value="17752" />
         </counts>
       </usages-collector>
     </session>
@@ -101,8 +101,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="205" column="25" selection-start-line="205" selection-start-column="25" selection-end-line="205" selection-end-column="25" />
+            <state relative-caret-position="119">
+              <caret line="190" column="30" lean-forward="true" selection-start-line="188" selection-start-column="11" selection-end-line="190" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#996#997#0" expanded="true" />
@@ -115,8 +115,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sample/GamePlay.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="524" column="18" lean-forward="true" selection-start-line="524" selection-start-column="18" selection-end-line="524" selection-end-column="18" />
+            <state relative-caret-position="391">
+              <caret line="669" lean-forward="true" selection-start-line="669" selection-end-line="669" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#958#959#0" expanded="true" />
@@ -140,7 +140,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/LeaderBoard.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="941">
+            <state relative-caret-position="1232">
               <caret line="50" column="38" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -196,6 +196,9 @@
       <find>task</find>
       <find>sub</find>
       <find>addl</find>
+      <find>system</find>
+      <find>move</find>
+      <find>movel</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -267,7 +270,7 @@
     <property name="OverrideImplement.combined" value="false" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/AKASH SHARMA/Desktop/Programs/FirstProject/src/sample/sample.fxml&#10;sett&#9;ACTION&#9;ShowSettings&#10;PROJECT STR&#9;ACTION&#9;ShowProjectStructureSettings" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543727504286" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543736214368" />
     <property name="dynamic.classpath" value="false" />
     <property name="full.screen.before.presentation.mode" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../lab8" />
@@ -489,7 +492,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/LeaderBoard.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="941">
+        <state relative-caret-position="1232">
           <caret line="50" column="38" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -506,8 +509,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="205" column="25" selection-start-line="205" selection-start-column="25" selection-end-line="205" selection-end-column="25" />
+        <state relative-caret-position="119">
+          <caret line="190" column="30" lean-forward="true" selection-start-line="188" selection-start-column="11" selection-end-line="190" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#996#997#0" expanded="true" />
@@ -518,8 +521,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/GamePlay.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="524" column="18" lean-forward="true" selection-start-line="524" selection-start-column="18" selection-end-line="524" selection-end-column="18" />
+        <state relative-caret-position="391">
+          <caret line="669" lean-forward="true" selection-start-line="669" selection-end-line="669" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#958#959#0" expanded="true" />
