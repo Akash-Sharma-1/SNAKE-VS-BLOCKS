@@ -29,4 +29,8 @@ public class Snake {
      * length of the snake
      */
     int length;
+    /**
+     * Color
+     */
+    Color c;
 }

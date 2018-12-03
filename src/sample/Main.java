@@ -10,9 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Scene.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -188,8 +186,25 @@ public class Main extends Application {
         pl4.setDuration(Duration.seconds(4));
         pl4.play();
         r.getChildren().add(hbox2);
-        Group root = new Group(r, hbox,lastscore,c1,c2,c3,c4,c5);
-
+//        int snakecolor;
+        Snake hsss=new Snake();
+        hsss.c=Color.YELLOW;
+        MenuItem menuItem1 = new MenuItem("GREEN");
+        MenuItem menuItem2 = new MenuItem("BLUE");
+        MenuItem menuItem3= new MenuItem("YELLOW");
+        MenuButton menuButton = new MenuButton("Snake Avatar", null, menuItem1, menuItem2,menuItem3);
+        menuButton.setLayoutX(0);
+        menuButton.setLayoutY(470);
+        Group root = new Group(r, hbox,lastscore,c1,c2,c3,c4,c5,menuButton);
+        menuItem1.setOnAction(event -> {
+            hsss.c=Color.GREEN;
+        });
+        menuItem2.setOnAction(event -> {
+            hsss.c=Color.BLUE;
+        });
+        menuItem3.setOnAction(event -> {
+            hsss.c=Color.YELLOW;
+        });
 
         //SCENE 1 -> HOME PAGE
         Scene scene= new Scene(root,400, 500);
@@ -247,7 +262,7 @@ public class Main extends Application {
             name.setLayoutY(80);
             player current=new player(" ",0);
             GamePlay g=new GamePlay(current);
-            Scene game=g.game(scene,primaryStage,root,l);
+            Scene game=g.game(scene,primaryStage,root,l,hsss);
             game.setFill(Color.BLACK);
             b.setOnAction(ee-> {
 

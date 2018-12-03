@@ -274,7 +274,7 @@ public class GamePlay{
      * @param tokensout Arraylist of all the token's types on the current screen
      * @param tokentrans Arraylist of all the token's transition on the current screen
      */
-    public void tokengenerator(Pane p,int ii,ArrayList<Circle> tokens, ArrayList<Integer> tokensout,ArrayList<TranslateTransition> tokentrans)
+    public void tokengenerator(Pane p,int ii,ArrayList<Circle> tokens, ArrayList<Integer> tokensout,ArrayList<TranslateTransition> tokentrans,Snake hsss)
     {
 //        ArrayList<Rectangle> tokens=new ArrayList<Rectangle>();
         Random r = new Random();
@@ -285,7 +285,7 @@ public class GamePlay{
             Circle c=new Circle();
             if(x==0)
             {
-                c=new Circle(((pos*80)-40),-18,9, Color.YELLOW);
+                c=new Circle(((pos*80)-40),-18,9, hsss.c);
 //                else c=new Circle(((pos*80)-40),-18,9, Color.RED);
                 p.getChildren().add(c);
 
@@ -569,7 +569,7 @@ public class GamePlay{
      * @param root homepage group on which components were added
      * @return scene with the main pane added
      */
-     public Scene game(Scene home, Stage primaryStage, Group root,LeaderBoard l)
+     public Scene game(Scene home, Stage primaryStage, Group root,LeaderBoard l,Snake hsss)
      {
          paused pausecheck=new paused();
          Pane p=new Pane();
@@ -610,7 +610,7 @@ public class GamePlay{
          len.setLayoutY(225);
          for(int i=0;i<5;i++)
          {
-             snake.add(new Circle(200,point,7, Color.YELLOW));
+             snake.add(new Circle(200,point,7, hsss.c));
              point+=14;
          }
          Rectangle rr=new Rectangle(80,80);
@@ -641,7 +641,7 @@ public class GamePlay{
                  blockgenerator(p,blocks,snake,blockss,blockstransition,checkblock);
                  //Walls with Blocks
                  wallgenerator(p,0,wall1,walls11,wallstransition);
-                 tokengenerator(p,0,tokens11,token1type,tokenstransition);
+                 tokengenerator(p,0,tokens11,token1type,tokenstransition,hsss);
                  System.out.println(checkblock);
 
 
@@ -681,7 +681,7 @@ public class GamePlay{
 //                 blockgenerator(p);
                  //Walls with Blocks
 //                 wallgenerator(p,0);
-                 tokengenerator(p,1,tokens22,token2type,tokenstransition);
+                 tokengenerator(p,1,tokens22,token2type,tokenstransition,hsss);
 //                 System.out.println(snake.get(0).getTranslateX());
 
 
